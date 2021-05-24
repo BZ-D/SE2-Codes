@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.seecoder.courselearning.mapperservice.user.UserMapper">
+  <resultMap id="BaseResultMap" type="cn.seecoder.courselearning.po.user.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uname" jdbcType="VARCHAR" property="uname" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="balance" jdbcType="INTEGER" property="balance" />
+    <result column="user_role" jdbcType="VARCHAR" property="userRole" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.seecoder.courselearning.po.user.User" useGeneratedKeys="true" keyProperty="id">
+    insert into user_info (id, uname, phone, 
+      password, picture, balance, 
+      user_role, create_time)
+    values (#{id,jdbcType=INTEGER}, #{uname,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{balance,jdbcType=INTEGER}, 
+      #{userRole,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.seecoder.courselearning.po.user.User">
+    update user_info
+    set uname = #{uname,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, uname, phone, password, picture, balance, user_role, create_time
+    from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, uname, phone, password, picture, balance, user_role, create_time
+    from user_info
+    where phone = #{phone}
+    limit 0,1
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, uname, phone, password, picture, balance, user_role, create_time
+    from user_info
+  </select>
+  <update id="increaseBalance">
+    update user_info
+    set balance = balance+#{delta,jdbcType=INTEGER}
+    where id = #{id}
+  </update>
+  <update id="decreaseBalance">
+    update user_info
+    set balance = balance-#{delta,jdbcType=INTEGER}
+    where id = #{id}
+  </update>
+</mapper>
