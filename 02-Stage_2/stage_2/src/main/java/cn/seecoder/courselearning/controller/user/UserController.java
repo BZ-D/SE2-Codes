@@ -1,4 +1,4 @@
-package cn.seecoder.courselearning.controller.course;
+package cn.seecoder.courselearning.controller.user;
 
 import cn.seecoder.courselearning.service.user.UserService;
 import cn.seecoder.courselearning.vo.ResultVO;

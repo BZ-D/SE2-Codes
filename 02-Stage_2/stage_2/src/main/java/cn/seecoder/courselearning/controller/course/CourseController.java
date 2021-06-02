@@ -1,4 +1,4 @@
-package cn.seecoder.courselearning.controller.coupon;
+package cn.seecoder.courselearning.controller.course;
 
 import cn.seecoder.courselearning.service.course.CourseService;
 import cn.seecoder.courselearning.util.Constant;

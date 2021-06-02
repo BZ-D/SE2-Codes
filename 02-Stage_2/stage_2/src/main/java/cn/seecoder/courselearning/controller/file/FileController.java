@@ -1,4 +1,4 @@
-package cn.seecoder.courselearning.controller;
+package cn.seecoder.courselearning.controller.file;
 
 import cn.seecoder.courselearning.service.file.FileService;
 import cn.seecoder.courselearning.vo.file.FileInfoVO;

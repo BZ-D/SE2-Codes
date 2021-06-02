@@ -1,4 +1,4 @@
-package cn.seecoder.courselearning.controller;
+package cn.seecoder.courselearning.controller.order;
 
 import cn.seecoder.courselearning.service.order.RechargeService;
 import cn.seecoder.courselearning.vo.order.RechargeOrderVO;

@@ -1,4 +1,4 @@
-package cn.seecoder.courselearning.controller;
+package cn.seecoder.courselearning.controller.coupon;
 
 import cn.seecoder.courselearning.dto.coupon.CouponDTO;
 import cn.seecoder.courselearning.dto.coupon.DeliverCouponDTO;
