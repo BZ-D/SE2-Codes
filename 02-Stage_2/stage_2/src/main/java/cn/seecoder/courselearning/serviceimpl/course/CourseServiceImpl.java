@@ -89,7 +89,9 @@ public class CourseServiceImpl implements CourseService {
                 bought = order.getStatus().equals(Constant.ORDER_STATUS_SUCCESS);
             manageable = uid.equals(course.getTeacherId());
         }
-        return new CourseVO(course, bought, manageable);
+        CourseVO courseVO = new CourseVO(course, bought, manageable);
+        courseVO.setLiked(courseLikesMapper.count(courseId, uid) != 0);
+        return courseVO;
     }
 
     @Override
@@ -117,6 +119,7 @@ public class CourseServiceImpl implements CourseService {
         if(uid != null && uid > 0){
             List<CourseVO> voList = result.getList();
             for(CourseVO vo: voList){
+                vo.setLiked(courseLikesMapper.count(vo.getId(), uid) != 0);
                 CourseOrder order = orderService.queryMostRecentOrder(uid, vo.getId());
                 if(order != null)
                     vo.setBought(order.getStatus().equals(Constant.ORDER_STATUS_SUCCESS));
@@ -125,5 +128,29 @@ public class CourseServiceImpl implements CourseService {
         }
         return result;
     }
+
+    @Override
+    public ResultVO<CourseVO> setCourseLike(Integer uid, Integer courseId) {
+
+        if (courseLikesMapper.insert(courseId,uid) > 0) {
+            return new ResultVO<>(Constant.REQUEST_SUCCESS, "点赞成功。");
+        }else
+            return new ResultVO<>(Constant.REQUEST_FAIL, "服务器错误");
+//            return new ResultVO<>(Constant.REQUEST_FAIL, "已点赞！");
+
+
+    }
+
+    @Override
+    public ResultVO<CourseVO> cancelCourseLike(Integer uid, Integer courseId) {
+
+        if (courseLikesMapper.deleteByPrimaryKey(courseId,uid) > 0)
+            return new ResultVO<>(Constant.REQUEST_SUCCESS, "取消点赞成功。");
+        else
+            return new ResultVO<>(Constant.REQUEST_FAIL, "服务器错误");
+
+    }
+
+
 
 }

@@ -96,7 +96,7 @@ public class CourseController {
      */
     @PostMapping("/like/{courseId}")
     public ResultVO<CourseVO> setCourseLike(@RequestParam Integer uid, @PathVariable Integer courseId) {
-        return null;
+        return courseService.setCourseLike(uid, courseId);
     }
 
     /**
@@ -106,6 +106,6 @@ public class CourseController {
      */
     @PostMapping("/cancel_like/{courseId}")
     public ResultVO<CourseVO> cancelCourseLike(@RequestParam Integer uid, @PathVariable Integer courseId) {
-        return null;
+        return courseService.cancelCourseLike(uid, courseId);
     }
 }
