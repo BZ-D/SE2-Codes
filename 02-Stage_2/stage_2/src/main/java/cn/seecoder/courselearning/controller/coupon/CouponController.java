@@ -25,6 +25,7 @@ public class CouponController {
     // 查看所有的优惠券
     @GetMapping("/getAll")
     ResultVO<List<CouponVO>> getAll() {
+        System.out.println("getAll");
         return couponService.getAllAvailableCoupons();
     }
 

@@ -95,6 +95,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public ResultVO<List<CouponVO>> getAllAvailableCoupons() {
         List<Coupon> coupons = couponMapper.selectAll();
+        System.out.println(coupons.size());
         LocalDateTime now = LocalDateTime.now();
         // 获取还未结束或还未开始的可发放的优惠券
         List<CouponVO> result = coupons.stream().filter(coupon -> coupon.getEndTime().isAfter(now) && coupon.isValid()).map(CouponVO::new).collect(Collectors.toList());

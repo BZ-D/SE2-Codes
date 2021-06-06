@@ -13,7 +13,7 @@
       <v-row>
         <coupon-item
           v-for="c in couponList"
-          :key="c.id"
+          :key="c.key"
           :id="c.id"
           :type="c.type"
           :scope="c.scope"
@@ -22,7 +22,7 @@
           :metadata="c.metadata"
           :startTime="c.startTime"
           :endTime="c.endTime"
-          :vaild="c.vaild"
+          :vaild="c.valid"
           :sharable="c.sharable"
         >
         </coupon-item>
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      colorList: ["#26A69A", "#00B0FF", "#5C6BC0", "#FFB300", "#E57373"],
+      colorList: ["#26A69A", "#00B0FF", "#5C6BC0", "#ffb300", "#E57373"],
       couponList: null
     };
   },

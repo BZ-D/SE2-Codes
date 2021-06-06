@@ -45,7 +45,7 @@
           :metadata="c.metadata"
           :startTime="c.startTime"
           :endTime="c.endTime"
-          :vaild="c.vaild"
+          :vaild="c.valid"
           :sharable="c.sharable"
           @deliver-coupon="handleDeliverClick"
         >
@@ -62,13 +62,13 @@
           label="分发方式"
         ></v-select>
         <v-text-field
-          v-show="deliver === 'SINGLE'"
+          v-show="deliver === '指定单一用户'"
           v-model="userId"
           label="用户ID"
         ></v-text-field>
         <v-text-field
-          v-show="deliver === 'COURSE_LIKE'"
-          v-model="userId"
+          v-show="deliver === '为某课程点赞的用户'"
+          v-model="courseId"
           label="课程ID"
         ></v-text-field>
         <v-switch
@@ -102,7 +102,7 @@ export default {
       couponId: "",
       deliverList_: ["SINGLE", "COURSE_LIKE", "ALL"],
       deliverList: ["指定单一用户", "为某课程点赞的用户", "所有用户"],
-      deliver: "SINGLE",
+      deliver: "指定单一用户",
       userId: "",
       courseId: "",
       canDuplicate: false,

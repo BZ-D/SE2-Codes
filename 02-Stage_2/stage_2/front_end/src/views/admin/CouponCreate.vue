@@ -31,17 +31,17 @@
           label="优惠分类"
         ></v-select>
         <v-text-field
-          v-show="couponInfo.type === 'DISCOUNT'"
+          v-show="couponInfo.type === '折扣'"
           v-model="meta.discount"
           label="折扣数额（0 ～ 1）"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.type === 'CUT_DOWN'"
+          v-show="couponInfo.type === '满减'"
           v-model="meta.threshold"
           label="满减门槛"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.type === 'CUT_DOWN'"
+          v-show="couponInfo.type === '满减'"
           v-model="meta.cutDown"
           label="满减金额"
         ></v-text-field>
@@ -51,19 +51,19 @@
           label="使用范围"
         ></v-select>
         <v-text-field
-          v-show="couponInfo.scope === 'SINGLE'"
-          v-model="meta.teacherId"
+          v-show="couponInfo.scope === '单一课程'"
+          v-model="meta.courseId"
           label="课程ID"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.scope === 'TEACHER'"
+          v-show="couponInfo.scope === '指定教师的课程'"
           v-model="meta.teacherId"
           label="教师ID"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.scope === 'SCHOOL'"
-          v-model="meta.teacherId"
-          label="教师ID"
+          v-show="couponInfo.scope === '指定学校的课程'"
+          v-model="meta.schoolId"
+          label="学校ID"
         ></v-text-field>
         <v-text-field
           v-model="couponInfo.description"
@@ -105,7 +105,7 @@ export default {
       scopeList: [
         "单一课程",
         "指定教师的课程",
-        "指定学习的课程",
+        "指定学校的课程",
         "全站课程通用"
       ],
       couponInfo: {
