@@ -26,10 +26,14 @@ public class CutDownCouponStrategy extends AbstractCouponStrategy {
 
     @Override
     public int useCoupon(CourseOrderVO orderVO, Coupon coupon) {
-        Integer cutDown = (Integer)JSONHelper.getByProperty(coupon.getMetadata(), "cutDown");
-        int initialCost = orderVO.getCost() == null ? orderVO.getOrigin() : orderVO.getCost();
+        double cutDown = Double.parseDouble(String.valueOf(
+                JSONHelper.getByProperty(coupon.getMetadata(), "cutDown")));
+
+        int initialCost = orderVO.getCost() == null ?
+                orderVO.getOrigin() : orderVO.getCost();
+
         if (initialCost - cutDown > 0) {
-            return initialCost - cutDown;
+            return (int)(initialCost - cutDown);
         } else return 0;
     }
 }

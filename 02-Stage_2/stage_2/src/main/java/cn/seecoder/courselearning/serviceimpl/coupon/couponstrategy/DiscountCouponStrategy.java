@@ -12,17 +12,18 @@ import org.springframework.stereotype.Component;
 public class DiscountCouponStrategy extends AbstractCouponStrategy {
     @Override
     public boolean canUse(CourseOrderVO orderVO, Coupon coupon) {
-        Object discount = JSONHelper.getByProperty(coupon.getMetadata(), "discount");
-        if (discount == null) {
+        Object discountObj = JSONHelper.getByProperty(coupon.getMetadata(), "discount");
+        if (discountObj == null) {
             // 无效优惠券
             return false;
         }
+        double discount=Double.parseDouble(String.valueOf(discountObj));
         // 判断满减策略
         return super.canUse(orderVO, coupon) && (Double)discount > 0 && (Double)discount < 1;
     }
     @Override
     public int useCoupon(CourseOrderVO orderVO, Coupon coupon) {
-        Double discount = (Double)JSONHelper.getByProperty(coupon.getMetadata(), "discount");
+        double discount = Double.parseDouble(String.valueOf(JSONHelper.getByProperty(coupon.getMetadata(), "discount")));
         int initialCost = orderVO.getCost() == null ? orderVO.getOrigin() : orderVO.getCost();
        return (int)(initialCost * discount);
     }

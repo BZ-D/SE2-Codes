@@ -13,9 +13,15 @@ import java.util.function.BiFunction;
 public enum CouponScope {
 
 
-    SINGLE("单个课程", (course,coupon) -> course.getId().equals((Integer)JSONHelper.getByProperty(coupon.getMetadata(), "courseId"))),
-    TEACHER("某个老师的课程", (course, coupon) -> course.getId().equals((Integer)JSONHelper.getByProperty(coupon.getMetadata(), "teacherId"))),
-    SCHOOL("某个学校的课程", (course, coupon) -> course.getId().equals((Integer)JSONHelper.getByProperty(coupon.getMetadata(), "schoolId"))),
+    SINGLE("单个课程", (course,coupon) -> course.getId().equals(
+            Integer.parseInt(String.valueOf(JSONHelper.getByProperty(coupon.getMetadata(), "courseId")))
+    )),
+
+    TEACHER("某个老师的课程", (course, coupon) -> course.getTeacherId().equals(
+            Integer.parseInt(String.valueOf(JSONHelper.getByProperty(coupon.getMetadata(), "teacherId")))
+    )),
+
+    SCHOOL("某个学校的课程", (course, coupon) -> course.getSchool().equals(String.valueOf(JSONHelper.getByProperty(coupon.getMetadata(), "schoolId")))),
     COMMON("通用，全站课程皆可使用", (course, coupon) -> true);
 
     private final String value;
