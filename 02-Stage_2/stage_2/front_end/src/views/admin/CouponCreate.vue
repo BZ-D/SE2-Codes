@@ -2,23 +2,23 @@
   <div>
     <!-- alert -->
     <v-alert
-      class="alert"
-      outlined
-      type="success"
-      text
-      v-show="showSuccessDialog"
-      transition="scroll-y-transition"
+        class="alert"
+        outlined
+        type="success"
+        text
+        v-show="showSuccessDialog"
+        transition="scroll-y-transition"
     >
       优惠创建成功！
     </v-alert>
     <!-- alert -->
     <v-alert
-      class="alert"
-      outlined
-      type="warning"
-      text
-      v-show="showFailDialog"
-      transition="scroll-y-transition"
+        class="alert"
+        outlined
+        type="warning"
+        text
+        v-show="showFailDialog"
+        transition="scroll-y-transition"
     >
       {{ msg }}
     </v-alert>
@@ -26,62 +26,62 @@
       <form class="pa-12 grey lighten-5 mt-8">
         <v-text-field v-model="couponInfo.name" label="优惠名称"></v-text-field>
         <v-select
-          :items="typeList"
-          v-model="couponInfo.type"
-          label="优惠分类"
+            :items="typeList"
+            v-model="couponInfo.type"
+            label="优惠分类"
         ></v-select>
         <v-text-field
-          v-show="couponInfo.type === '折扣'"
-          v-model="meta.discount"
-          label="折扣数额（0 ～ 1）"
+            v-show="couponInfo.type === '折扣'"
+            v-model="meta.discount"
+            label="折扣数额（0 ～ 1）"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.type === '满减'"
-          v-model="meta.threshold"
-          label="满减门槛"
+            v-show="couponInfo.type === '满减'"
+            v-model="meta.threshold"
+            label="满减门槛"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.type === '满减'"
-          v-model="meta.cutDown"
-          label="满减金额"
+            v-show="couponInfo.type === '满减'"
+            v-model="meta.cutDown"
+            label="满减金额"
         ></v-text-field>
         <v-select
-          :items="scopeList"
-          v-model="couponInfo.scope"
-          label="使用范围"
+            :items="scopeList"
+            v-model="couponInfo.scope"
+            label="使用范围"
         ></v-select>
         <v-text-field
-          v-show="couponInfo.scope === '单一课程'"
-          v-model="meta.courseId"
-          label="课程ID"
+            v-show="couponInfo.scope === '单一课程'"
+            v-model="meta.courseId"
+            label="课程ID"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.scope === '指定教师的课程'"
-          v-model="meta.teacherId"
-          label="教师ID"
+            v-show="couponInfo.scope === '指定教师的课程'"
+            v-model="meta.teacherId"
+            label="教师ID"
         ></v-text-field>
         <v-text-field
-          v-show="couponInfo.scope === '指定学校的课程'"
-          v-model="meta.schoolId"
-          label="学校ID"
+            v-show="couponInfo.scope === '指定学校的课程'"
+            v-model="meta.schoolId"
+            label="学校ID"
         ></v-text-field>
         <v-text-field
-          v-model="couponInfo.description"
-          label="优惠说明"
+            v-model="couponInfo.description"
+            label="优惠说明"
         ></v-text-field>
         <v-text-field
-          v-model="couponInfo.startTime"
-          label="开始时间"
-          messages="YYYY-MM-DD HH:MM:SS"
+            v-model="couponInfo.startTime"
+            label="开始时间"
+            messages="YYYY-MM-DD HH:MM:SS"
         ></v-text-field>
         <v-text-field
-          v-model="couponInfo.endTime"
-          label="结束时间"
-          messages="YYYY-MM-DD HH:MM:SS"
+            v-model="couponInfo.endTime"
+            label="结束时间"
+            messages="YYYY-MM-DD HH:MM:SS"
         ></v-text-field>
         <v-switch
-          v-model="couponInfo.sharable"
-          :label="`是否可与其他优惠同时使用: ${couponInfo.sharable.toString()}`"
+            v-model="couponInfo.sharable"
+            :label="`是否可与其他优惠同时使用: ${couponInfo.sharable.toString()}`"
         ></v-switch>
         <v-btn class="ml-0 mt-8 info" @click="submit">
           确认
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { createCoupon } from "@/api/coupon";
+import {createCoupon} from "@/api/coupon";
 
 export default {
   name: "CouponCreate",

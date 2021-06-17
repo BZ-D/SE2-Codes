@@ -123,6 +123,123 @@
         </v-row>
       </template>
 
+      <!-- 添加题目 dialog -->
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="addQuestionDialog" persistent max-width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">添加题目</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="题目名称"
+                        v-model="questionInfo.title"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="答案内容"
+                        v-model="questionInfo.answer"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="题目解析"
+                        v-model="questionInfo.analysis"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="addQuestionDialog = false">
+                  取消
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="handleAddQuestion">
+                  添加
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 创建课程测试 dialog -->
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="createTestDialog" persistent max-width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">创建测试</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="测试名称"
+                        v-model="examInfo.title"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-btn class="choose-question-btn" color="green" dark @click.stop="chooseQuestionDialog = true; createTestDialog = false">
+                从题库中选择题目
+              </v-btn>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="createTestDialog = false">
+                  取消
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="handleCreateTest">
+                  发布
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 从题库中选题 dialog -->
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="chooseQuestionDialog" persistent max-width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">选择题目</span>
+              </v-card-title>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="chooseQuestionDialog = false; createTestDialog = true">
+                  取消
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="handleChooseQuestion">
+                  选择
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <v-row class="add-question">
+        <v-btn color="green" dark @click.stop="createTestDialog = true">
+          创建课程测试
+        </v-btn>
+        <v-btn color="purple" dark @click.stop="addQuestionDialog = true">
+          向题库中添加一道题
+        </v-btn>
+      </v-row>
       <v-row>
         <!-- 课件列表 -->
         <v-col>
@@ -169,6 +286,7 @@
             </v-list>
           </v-card>
         </v-col>
+
         <!-- 课程信息 -->
         <v-col>
           <form class="pa-12 grey lighten-5 mt-8">
@@ -222,7 +340,10 @@
           </form>
         </v-col>
       </v-row>
+
+
     </v-container>
+
   </div>
 </template>
 
@@ -262,6 +383,23 @@ export default {
         downloadFlag: true,
         availableFlag: false,
         uploadTime: ""
+      },
+      addQuestionDialog: false,
+      questionInfo: {
+        // 只考虑填空题
+        title: '',   // 题干
+        answer: '',  // 题目答案
+        analysis: '', // 题目解析
+      },
+      createTestDialog: false,
+      questionsOfThisCourse: [], // 该课程的题库，用于在选择题目页面展示
+      chooseQuestionDialog: false,
+      examInfo: {
+        title: '',
+        examQuestions: [
+          // 被选择用作测试的题目
+
+        ]
       }
     };
   },
@@ -353,6 +491,18 @@ export default {
           this.showAlert = false;
         }, 1000);
       });
+    },
+
+    handleAddQuestion() {
+      // 添加一道题
+    },
+
+    handleCreateTest() {
+      // 创建课程测试
+    },
+
+    handleChooseQuestion() {
+      // 从题库中选题
     }
   },
 
@@ -370,4 +520,18 @@ export default {
   top: 100px;
   z-index: 999;
 }
+
+.add-question {
+  padding-top: 50px;
+}
+
+.add-question * {
+  margin-right: 20px;
+}
+
+.choose-question-btn {
+  margin-left: 20px;
+  margin-top: 7px;
+}
+
 </style>

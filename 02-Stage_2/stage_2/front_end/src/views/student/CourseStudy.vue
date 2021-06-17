@@ -13,7 +13,7 @@
         {{ alertMsg }}
       </v-alert>
 
-      <!-- dialog-->
+      <!-- 课件 dialog-->
       <template>
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent max-width="600px">
@@ -98,6 +98,142 @@
         </v-row>
       </template>
 
+      <!-- 测试列表 dialog -->
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="takeExamDialog" persistent max-width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">选择一场考试</span>
+              </v-card-title>
+
+              <v-card-text v-if="allExams.length===0">
+                此课程目前没有测试！请等待老师发布。
+              </v-card-text>
+
+              <v-container class="px-0" fluid>
+                <v-radio-group v-model="chosenExam">
+                  <v-radio v-for="(exam, i) in allExams" :key="i"
+                           :label="exam.title + ' ' +'('+exam.questions.length+'道题)  '+ (exam.isValid ? '进行中' : '已过期')"
+                           :value="i" :readonly="!exam.isValid">
+
+                  </v-radio>
+                </v-radio-group>
+              </v-container>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="takeExamDialog = false; chosenExam = -1"
+                       v-if="allExams.length!==0">
+                  取消
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="handleChooseExam" v-if="allExams.length!==0">
+                  参加考试
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="takeExamDialog = false" v-if="allExams.length===0">
+                  好的
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 已做测试列表 dialog -->
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="checkExamDialog" persistent max-width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">选择一场考试</span>
+              </v-card-title>
+
+              <v-card-text v-if="finishedExams.length===0">
+                你还没有完成该课程的相关测试哦，去参加一次测试吧！
+              </v-card-text>
+
+              <v-container class="px-0" fluid>
+                <v-radio-group v-model="chosenFinishedExam">
+                  <v-radio v-for="(exam, i) in finishedExams" :key="i"
+                           :label="exam.title"
+                           :value="i">
+
+                  </v-radio>
+                </v-radio-group>
+              </v-container>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="checkExamDialog = false; chosenFinishedExam = -1"
+                       v-if="finishedExams.length!==0">
+                  取消
+                </v-btn>
+                <v-btn color="blue darken-1" text
+                       @click="handleCheckFinishedExam"
+                       v-if="finishedExams.length!==0">
+                  查看考试结果
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="checkExamDialog = false" v-if="finishedExams.length===0">
+                  好的
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 参加测试 dialog -->
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="takingExam" persistent max-width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">考试中</span>
+              </v-card-title>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="takingExam = false;chosenExam=-1">
+                  中止考试
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="handleSubmitExam">
+                  提交试卷
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <!-- 查看考试结果 dialog -->
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="checkExamResult" persistent max-width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">考试结果</span>
+              </v-card-title>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="checkExamResult = false; checkExamDialog=true">
+                  返回上层
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
+      <v-row class="take-exam-btn">
+        <v-btn color="green" dark @click.stop="takeExamDialog = true">
+          参加课程考试
+        </v-btn>
+        <v-btn color="blue" dark @click.stop="checkExamDialog = true">
+          查看已做试卷
+        </v-btn>
+      </v-row>
+
       <v-row>
         <!-- 课件 -->
         <v-col>
@@ -129,7 +265,8 @@
                     <v-icon
                       color="grey lighten-1"
                       @click="showFileDialog(file.id)"
-                      >mdi-more</v-icon
+                    >mdi-more
+                    </v-icon
                     >
                   </v-btn>
                 </v-list-item-action>
@@ -214,6 +351,7 @@ export default {
       showAlert: false,
       alertMsg: "",
       dialog: false,
+
       currentFile: {
         id: 0,
         courseId: 0,
@@ -226,7 +364,88 @@ export default {
         downloadFlag: true,
         availableFlag: false,
         uploadTime: ""
-      }
+      },
+      takeExamDialog: false,
+      allExams: [
+        // 存放该课程所有的测试
+        {
+          id: 1,
+          title: "基础夯实测试",
+          questions: [
+            "1+2=?",
+            "3*2=?",
+            "4/2=?"
+          ],
+          isValid: true // 是否过期
+        },
+        {
+          id: 2,
+          title: "提高测试",
+          questions: [
+            "11+21=?",
+            "32*2=?",
+            "43/2=?"
+          ],
+          isValid: false
+        }
+      ],
+      chosenExam: -1,
+      checkExamDialog: false,
+      finishedExams: [
+        {
+          id: 1,
+          title: "基础夯实测试",
+          questions: [
+            {
+              title: "1+2=?",
+              answer: "3",
+              studentAnswer: "3",
+              analysis: "基本点1"
+            },
+            {
+              title: "3*2=?",
+              answer: "6",
+              studentAnswer: "5",
+              analysis: "基本点2"
+            },
+            {
+              title: "4/2=?",
+              answer: "2",
+              studentAnswer: "2",
+              analysis: "基本点3"
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: "提高测试",
+          questions: [
+
+            {
+              title: "11+21=?",
+              answer: "32",
+              studentAnswer: "33",
+              analysis: "提升点1"
+            },
+            {
+              title: "32*2=?",
+              answer: "64",
+              studentAnswer: "64",
+              analysis: "提升点2"
+            },
+            {
+              title: "43/2=?",
+              answer: "21.5",
+              studentAnswer: "21",
+              analysis: "提升点3"
+            }
+
+          ]
+        }
+      ],
+      chosenFinishedExam: -1,
+      checkExamResult: false,
+      takingExam: false
     };
   },
 
@@ -271,6 +490,31 @@ export default {
       //   }, 1000);
       // });
       window.open(`${FILE_BASE_PATH}/${this.currentFile.fileName}`);
+    },
+
+    handleChooseExam() {
+      // 学生选择参加该课程的某个考试
+      if (this.chosenExam >= 0) {
+        this.takeExamDialog = false;
+        this.takingExam = true;
+      } else {
+        window.alert("请选择一项考试！");
+      }
+
+    },
+
+    handleCheckFinishedExam() {
+      // 查看已做试卷
+      if (this.chosenFinishedExam >= 0) {
+        this.checkExamDialog = false;
+        this.checkExamResult = true;
+      } else {
+        window.alert("请选择一项考试！");
+      }
+    },
+
+    handleSubmitExam() {
+      // 提交试卷
     }
   },
 
@@ -287,5 +531,17 @@ export default {
   left: 50%;
   top: 100px;
   z-index: 999;
+}
+
+.take-exam-btn {
+  padding-top: 50px;
+}
+
+.take-exam-btn * {
+  margin-right: 20px;
+}
+
+.px-0 {
+  margin-left: 20px;
 }
 </style>
