@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.seecoder.courselearning.mapperservice.course.CourseWareMapper">
+  <resultMap id="BaseResultMap" type="cn.seecoder.courselearning.po.course.CourseWare">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_type" jdbcType="VARCHAR" property="fileType" />
+    <result column="file_size" jdbcType="VARCHAR" property="fileSize" />
+    <result column="free_flag" jdbcType="BIT" property="freeFlag" />
+    <result column="download_flag" jdbcType="BIT" property="downloadFlag" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_ware
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.seecoder.courselearning.po.course.CourseWare" useGeneratedKeys="true" keyProperty="id">
+    insert into course_ware (id, course_id, number, 
+      title, file_name, file_type, 
+      file_size, free_flag, download_flag, 
+      upload_time)
+    values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR}, 
+      #{fileSize,jdbcType=VARCHAR}, #{freeFlag,jdbcType=BIT}, #{downloadFlag,jdbcType=BIT}, 
+      #{uploadTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.seecoder.courselearning.po.course.CourseWare">
+    update course_ware
+    set course_id = #{courseId,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_type = #{fileType,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=VARCHAR},
+      free_flag = #{freeFlag,jdbcType=BIT},
+      download_flag = #{downloadFlag,jdbcType=BIT},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, course_id, number, title, file_name, file_type, file_size, free_flag, 
+    download_flag, upload_time
+    from course_ware
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, course_id, number, title, file_name, file_type, file_size, free_flag, 
+    download_flag, upload_time
+    from course_ware
+  </select>
+  <select id="selectByCourseId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, course_id, number, title, file_name, file_type, file_size, free_flag,
+    download_flag, upload_time
+    from course_ware
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.seecoder.courselearning.mapperservice.coupon.CouponMapper">
+  <resultMap id="BaseResultMap" type="cn.seecoder.courselearning.po.coupon.Coupon">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="scope" jdbcType="VARCHAR" property="scope" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="metadata" jdbcType="VARCHAR" property="metadata" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="is_valid" jdbcType="BIT" property="valid" />
+    <result column="is_sharable" jdbcType="BIT" property="sharable" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from coupon
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.seecoder.courselearning.po.coupon.Coupon" useGeneratedKeys="true" keyProperty="id">
+    insert into coupon (id, type, scope, name,
+      description, metadata,
+      start_time, end_time, is_valid, 
+      is_sharable)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{scope,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{description,jdbcType=VARCHAR}, #{metadata,jdbcType=VARCHAR},
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{sharable,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.seecoder.courselearning.po.coupon.Coupon">
+    update coupon
+    set type = #{type,jdbcType=VARCHAR},
+      scope = #{scope,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      metadata = #{cutDown,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      is_valid = #{valid,jdbcType=BIT},
+      is_sharable = #{sharable,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, type, scope, name, description, metadata,
+    start_time, end_time, is_valid, is_sharable
+    from coupon
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, type, scope, name, description, metadata,
+    start_time, end_time, is_valid, is_sharable
+    from coupon
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select c.id, c.type, c.scope, c.name, c.description, c.metadata,
+           c.start_time, c.end_time, c.is_valid, c.is_sharable
+    from coupon c, user_coupon uc
+    where uc.user_id = #{userId,jdbcType=INTEGER} and c.id = uc.coupon_id
+  </select>
+  <select id="selectByOrderId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select c.id, c.type, c.scope, c.name, c.description, c.metadata,
+           c.start_time, c.end_time, c.is_valid, c.is_sharable
+    from coupon c, course_order_coupon coc
+    where coc.order_id = #{orderId,jdbcType=INTEGER} and c.id = coc.coupon_id
+  </select>
+</mapper>

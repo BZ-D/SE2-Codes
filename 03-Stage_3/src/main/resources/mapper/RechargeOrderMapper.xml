@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.seecoder.courselearning.mapperservice.order.RechargeOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.seecoder.courselearning.po.order.RechargeOrder">
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="value" jdbcType="INTEGER" property="value" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from recharge_order
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.seecoder.courselearning.po.order.RechargeOrder" useGeneratedKeys="true" keyProperty="orderId">
+    insert into recharge_order (order_id, user_id, value, 
+      create_time)
+    values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{value,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.seecoder.courselearning.po.order.RechargeOrder">
+    update recharge_order
+    set user_id = #{userId,jdbcType=INTEGER},
+      value = #{value,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select order_id, user_id, value, create_time
+    from recharge_order
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_id, user_id, value, create_time
+    from recharge_order
+  </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_id, user_id, value, create_time
+    from recharge_order
+    where user_id = #{userId}
+  </select>
+</mapper>

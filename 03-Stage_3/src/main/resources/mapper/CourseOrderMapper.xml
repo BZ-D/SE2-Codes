@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.seecoder.courselearning.mapperservice.order.CourseOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.seecoder.courselearning.po.order.CourseOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="origin" jdbcType="INTEGER" property="origin" />
+    <result column="cost" jdbcType="INTEGER" property="cost" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.seecoder.courselearning.po.order.CourseOrder" useGeneratedKeys="true" keyProperty="id">
+    insert into course_order (id, origin, cost, course_id,
+      course_name, create_time, user_id, 
+      status)
+    values (#{id,jdbcType=INTEGER}, #{origin,jdbcType=INTEGER}, #{cost,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER},
+      #{courseName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.seecoder.courselearning.po.order.CourseOrder">
+    update course_order
+    set cost = #{cost,jdbcType=INTEGER},
+      origin = #{origin,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      course_name = #{courseName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, origin, cost, course_id, course_name, create_time, user_id, status
+    from course_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, origin, cost, course_id, course_name, create_time, user_id, status
+    from course_order
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, origin, cost, course_id, course_name, create_time, user_id, status
+    from course_order
+    where user_id=#{userId}
+  </select>
+  <select id="queryMostRecentOrder" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, origin, cost, course_id, course_name, create_time, user_id, status
+    from course_order
+    where user_id=#{userId} and course_id=#{courseId}
+    order by create_time desc limit 1
+  </select>
+</mapper>

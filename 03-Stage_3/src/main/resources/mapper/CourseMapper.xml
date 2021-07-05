@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.seecoder.courselearning.mapperservice.course.CourseMapper">
+  <resultMap id="BaseResultMap" type="cn.seecoder.courselearning.po.course.Course">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="school" jdbcType="VARCHAR" property="school" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+    <result column="cost" jdbcType="INTEGER" property="cost" />
+    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
+    <result column="likes" jdbcType="INTEGER" property="likes" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.seecoder.courselearning.po.course.Course" useGeneratedKeys="true" keyProperty="id">
+    insert into course (id, name, type,
+      intro, picture, school,
+      create_time, delete_time, cost,
+      teacher_id, teacher_name)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+      #{intro,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{deleteTime,jdbcType=TIMESTAMP}, #{cost,jdbcType=INTEGER},
+      #{teacherId,jdbcType=INTEGER}, #{teacherName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.seecoder.courselearning.po.course.Course">
+    update course
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      cost = #{cost,jdbcType=INTEGER},
+      teacher_id = #{teacherId,jdbcType=INTEGER},
+      teacher_name = #{teacherName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select c.id, c.name, c.type, c.intro, c.picture, c.school, c.create_time, c.delete_time, c.cost, c.teacher_id, c.teacher_name, count(t.user_id) as likes
+    from course c
+    left join course_likes as t
+    on c.id = t.course_id
+    where c.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select c.id, c.name, c.type, c.intro, c.picture, c.school, c.create_time, c.delete_time, c.cost, c.teacher_id, c.teacher_name, count(t.user_id) as likes
+    from course c
+    left join course_likes as t
+    on c.id = t.course_id
+    group by c.id
+  </select>
+  <select id="selectByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select c.id, c.name, c.type, c.intro, c.picture, c.school, c.create_time, c.delete_time, c.cost, c.teacher_id, c.teacher_name, count(t.user_id) as likes
+    from course c
+    left join course_likes as t
+    on c.id = t.course_id
+    where type = #{type,jdbcType=VARCHAR}
+    group by c.id
+  </select>
+  <select id="queryAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select c.id, name, type, intro, picture, school, create_time, delete_time, cost, teacher_id, teacher_name, count(t.user_id) as likes
+    from course c
+    left join course_likes as t
+    on c.id = t.course_id
+    <where>
+      <if test="name!=null and name!=''">
+        or name like concat('%',#{key},'%')
+      </if>
+      <if test="intro!=null and type!=''">
+        or intro like concat('%',#{key},'%')
+      </if>
+      <if test="school!=null and school!=''">
+        or school like concat('%',#{key},'%')
+      </if>
+    </where>
+    group by c.id
+    order by create_time asc
+  </select>
+  <select id="selectByTeacherId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select c.id, name, type, intro, picture, school, create_time, delete_time, cost, teacher_id, teacher_name, count(t.user_id) as likes
+    from course c
+    left join course_likes t
+    on c.id = t.course_id
+    where teacher_id = #{userId}
+    group by c.id
+  </select>
+  <select id="selectByStudentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select c.id, name, type, intro, picture, school, create_time, delete_time, cost, teacher_id, teacher_name, count(t.user_id) as likes
+    from course c
+    left join course_likes t
+    on c.id = t.course_id
+    where exists (
+        select o.id from course_order o where o.course_id = c.id and o.user_id = #{userId}
+    )
+    group by c.id
+  </select>
+  <select id="selectHotCourses" resultType="cn.seecoder.courselearning.po.course.Course">
+    select c.id, c.name, c.type, c.intro, c.picture, c.school, c.create_time, c.delete_time, c.cost, c.teacher_id, c.teacher_name, count(t.user_id) as likes
+    from course c
+    left join course_likes t
+    on c.id = t.course_id
+    group by c.id
+    order by likes desc
+  </select>
+</mapper>

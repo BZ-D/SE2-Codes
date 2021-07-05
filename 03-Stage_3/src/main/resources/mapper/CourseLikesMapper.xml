@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.seecoder.courselearning.mapperservice.course.CourseLikesMapper">
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from course_likes
+    where course_id=#{courseId,jdbcType=INTEGER} and user_id=#{userId,jdbcType=INTEGER};
+  </delete>
+  <insert id="insert">
+    insert into course_likes(course_id, user_id)
+    values (#{courseId,jdbcType=INTEGER},#{userId,jdbcType=INTEGER})
+  </insert>
+  <select id="count" resultType="java.lang.Integer">
+    select count(*) as num from course_likes
+    where course_id=#{courseId,jdbcType=INTEGER} and user_id=#{userId,jdbcType=INTEGER};
+  </select>
+  <select id="countLikesOfCourse" resultType="java.lang.Integer">
+    select count(*) as count from course_likes
+    where course_id=#{courseId,jdbcType=INTEGER};
+  </select>
+</mapper>
