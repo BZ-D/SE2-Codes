@@ -1,6 +1,17 @@
 <template>
   <div>
     <v-container class="ma-8 pa-4">
+
+      <v-chip
+          class="ma-2 welcome-vip"
+          color="#FF6666"
+          label
+          text-color="white"
+          v-show="isVIP"
+      >
+        欢迎您，VIP学生用户！在会员有效期内，您可以免费学习所有课程。
+      </v-chip>
+
       <!-- 热门课程 -->
       <v-row class="mt-8 mb-2">
         <v-chip
@@ -31,14 +42,15 @@
           :course-color="colorList[course.id % colorList.length]"
           :course-likes="course.likes"
           :liked="course.liked"
+          :is-v-i-p="isVIP"
           @buy-course="showDialog"
           @set-like="setLikeOrDislike"
         >
         </course-item>
       </v-row>
 
+      <!-- 分类课程 -->
       <template>
-        <!-- 分类课程 -->
         <v-row class="mt-2 mb-8">
           <v-chip
             class="ma-2"
@@ -76,6 +88,7 @@
                     :course-color="colorList[course.id % colorList.length]"
                     :course-likes="course.likes"
                     :liked="course.liked"
+                    :is-v-i-p="isVIP"
                     @buy-course="showDialog"
                     @set-like="setLikeOrDislike"
                   >
@@ -131,6 +144,7 @@
           :course-color="colorList[course.id % colorList.length]"
           :course-likes="course.likes"
           :liked="course.liked"
+          :is-v-i-p="isVIP"
           @buy-course="showDialog"
           @set-like="setLikeOrDislike"
         >
@@ -179,6 +193,7 @@
           :course-color="colorList[course.id % colorList.length]"
           :course-likes="course.likes"
           :liked="course.liked"
+          :is-v-i-p="isVIP"
           @buy-course="showDialog"
           @set-like="setLikeOrDislike"
         >
@@ -347,7 +362,9 @@ export default {
       coupons: [],
       selectedCoupons: [],
       settleDialog: false,
-      currentOrder: {}
+      currentOrder: {},
+      isVIP: true // 是否为vip
+      // isVIP: window.localStorage.getItem("isVIP")
     };
   },
 
@@ -478,12 +495,8 @@ export default {
     // 该方法绑定到了课程卡牌的心形按钮上
     setLikeOrDislike(courseId) {
       const uid = window.localStorage.getItem("userId");
-      // 通过一个接口来获取该用户对当前课程的点赞情况，根据结果进入不同的分支
-      // TODO Add your code here
       getCourseById({ courseId, uid }).then(res => {
         if (res.liked) {
-          // 分支2：若当前用户已经为该课程点过赞了，则调用取消点赞接口完成相关操作，可以仿照分支1的示例进行
-          // TODO Add your code here
           setCourseDislike(uid, courseId).then(res => {
             if (res.code === 1) {
               this.snackBarMsg = res.msg;
@@ -538,3 +551,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.welcome-vip {
+  font-size: 15px;
+  font-weight: bold;
+  padding: 15px 15px 15px 15px;
+}
+</style>

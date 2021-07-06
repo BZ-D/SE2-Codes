@@ -80,6 +80,9 @@ export default {
             this.showSuccessDialog = false;
           }, 1000);
           if (res.data.userRole === "STUDENT") {
+            // todo: 开通会员，额外存一个isVIP字段，用于在课程主页面显示会员标签和隐藏购买课程按钮，显示限时免费学习按钮
+            // window.localStorage.setItem("isVIP", res.data.is_vip)
+
             setTimeout(() => {
               this.$router.push("/student");
             }, 800);

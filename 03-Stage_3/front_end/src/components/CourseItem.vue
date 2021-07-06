@@ -3,10 +3,10 @@
     <v-card-title class="headline">
       {{ courseName }}
       <v-chip
-        small
-        class="ml-4"
-        v-show="status === 1 || status === 0"
-        :color="chipColor[status]"
+          small
+          class="ml-4"
+          v-show="status === 1 || status === 0 || status === 2"
+          :color="chipColor[status]"
       >
         {{ chip[status] }}
       </v-chip>
@@ -18,27 +18,30 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn text v-show="status === 0 || status === 1" @click="handleStudy"
-        >学习课程</v-btn
+      <v-btn text v-show="status === 0 || status === 1 || status === 2" @click="handleStudy"
+      >学习课程
+      </v-btn
       >
       <v-btn text v-show="status === -1 || !hasLogin" @click="handlePeek"
-        >浏览课程</v-btn
+      >浏览课程
+      </v-btn
       >
       <v-btn
-        text
-        v-show="status === -1 || (status === 0 && !bought)"
-        @click="buyCourse"
-        >{{ cost === 0 ? "免费购买" : "购买课程" }}</v-btn
+          text
+          v-show="status === -1 || (status === 0 && !bought)"
+          @click="buyCourse"
+      >{{ cost === 0 ? "免费购买" : "购买课程" }}
+      </v-btn
       >
     </v-card-actions>
     <v-row justify="end" class="pr-5">
       <v-btn
-        class="mx-2 align-self-center"
-        fab
-        dark
-        small
-        :color="!liked ? 'red' : 'black'"
-        @click="handleLike"
+          class="mx-2 align-self-center"
+          fab
+          dark
+          small
+          :color="!liked ? 'red' : 'black'"
+          @click="handleLike"
       >
         <v-icon v-if="liked" dark>
           mdi-thumb-down
@@ -101,12 +104,16 @@ export default Vue.extend({
     liked: {
       type: Boolean,
       default: false
+    },
+    isVIP: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      chip: ["免费", "已购"],
-      chipColor: ["success", "primary"]
+      chip: ["免费", "已购", "VIP限免"],
+      chipColor: ["success", "primary", "#FF6666"],
     };
   },
   methods: {
@@ -128,18 +135,21 @@ export default Vue.extend({
     }
   },
   computed: {
-    text: function() {
+    text: function () {
       return this.description.length < 60
-        ? this.description
-        : this.description.substring(0, 60) + "...";
+          ? this.description
+          : this.description.substring(0, 60) + "...";
     },
 
-    // 0 免费  1 已购
-    status: function() {
+    // 0 免费  1 已购 2 vip
+    status: function () {
       if (this.cost === 0) {
         return 0;
       } else if (this.bought) {
+        // todo: vip
         return 1;
+      } else if (this.isVIP) {
+        return 2;
       }
       return -1;
     }
@@ -152,4 +162,5 @@ export default Vue.extend({
   height: 85px;
   overflow: hidden;
 }
+
 </style>
