@@ -1,5 +1,5 @@
 import axios from "axios";
-import { QUESTION_MODULE, VIP_MODULE } from "@/api/_prefix";
+import { QUESTION_MODULE } from "@/api/_prefix";
 
 /**
  * 添加题目 POST /question

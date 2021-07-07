@@ -8,9 +8,9 @@ import { EXAM_MODULE } from "@/api/_prefix";
  */
 export const releaseExam = payload => {
   console.log(payload);
-  const { courseID, title, questions } = payload;
+  const { courseID, title, questions, startTime, endTime } = payload;
   return axios
-    .post(`${EXAM_MODULE}/release`, { courseID, title, questions })
+    .post(`${EXAM_MODULE}/release`, { courseID, title, questions, startTime, endTime })
     .then(res => {
       return res.data;
     });

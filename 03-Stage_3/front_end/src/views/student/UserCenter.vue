@@ -103,6 +103,13 @@
             label="账户余额"
             readonly
         ></v-text-field>
+
+        <v-text-field
+            v-model="userInfo.vip_deadline"
+            v-show="userInfo.is_vip"
+            label="会员到期时间"
+            readonly
+        ></v-text-field>
         <v-btn class="bottom-btn" color="primary" dark @click.stop="recharge_dialog = true">
           充值
         </v-btn>
@@ -137,7 +144,8 @@ export default {
         userRole: "",
         createTime: "",
         // todo: userinfo字段需要添加是否开通会员
-        is_vip: false
+        is_vip: false,
+        vip_deadline: "2021-07-13 23:59:59"
       },
       recharge_dialog: false,
       vip_dialog: false,
@@ -169,7 +177,8 @@ export default {
       getUser(userId).then(res => {
         this.userInfo = res || {};
         // todo: 后端写好后，把下面这行删掉
-        this.userInfo.is_vip = false
+        this.userInfo.is_vip = true
+        this.userInfo.vip_deadline = "2021-07-13 23:59:59"
       });
     },
 
